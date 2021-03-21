@@ -10,6 +10,8 @@ import logging.config
 import bottle
 from bottle import request, get, put, delete, abort
 
+import dbm
+
 # Set up app and logging
 app = bottle.default_app()
 app.config.load_config('./etc/kv.ini')
@@ -55,6 +57,8 @@ if not sys.warnoptions:
     import warnings
     warnings.simplefilter('ignore', ResourceWarning)
 
+#dbm.open('./var/kv.dbm', 'n')
+
 
 # http PUT localhost:5100 foo=bar
 @put('/')
@@ -78,7 +82,6 @@ def get_key(key):
 def delete_key(key):
     db = bottle.local.db
     return {key: db.pop(key, None)}
-
 
 # http localhost:5100
 # http localhost:5100?prefix=f
