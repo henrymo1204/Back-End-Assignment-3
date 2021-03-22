@@ -86,10 +86,10 @@ def reset_counts():
     requests.delete("http://localhost:5100/" + delete1)
     requests.delete("http://localhost:5100/" + delete2)
 
-    global sid1
-    global sid2
+    #global sid1
+    #global sid2
 
-    sid1 = str(uuid.uuid4())
-    sid2 = str(uuid.uuid4())
+    #sid1 = str(uuid.uuid4())
+    #sid2 = str(uuid.uuid4())
 
     return redirect('/')
