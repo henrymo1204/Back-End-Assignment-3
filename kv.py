@@ -57,7 +57,7 @@ if not sys.warnoptions:
     import warnings
     warnings.simplefilter('ignore', ResourceWarning)
 
-#dbm.open('./var/kv.dbm', 'n')
+dbm.open('./var/kv.dbm', 'n')
 
 
 # http PUT localhost:5100 foo=bar
