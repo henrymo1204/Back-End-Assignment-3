@@ -40,21 +40,16 @@ def show_form():
 
     #return template('counter.tpl', counter1=count1, counter2=count2)
     
-    count1 = request.get_cookie('count1')
-    count2 = request.get_cookie('count2')
-    if count1 is None and count2 is None:
-         sid1 = str(uuid.uuid4())
-         sid2 = str(uuid.uuid4())
-         requests.put("http://localhost:5100", json={sid1: 0})
-         requests.put("http://localhost:5100", json={sid2: 0})
-         count1 = sid1
-         count2 = sid2
-         response.set_cookie('count1', count1)
-         response.set_cookie('count2', count2)
-    c1 = requests.get("http://localhost:5100/" + count1).json()[count1]
-    c2 = requests.get("http://localhost:5100/" + count2).json()[count2]
+    count = request.get_cookie('count')
+    if count is None:
+         sid = str(uuid.uuid4())
+         requests.put("http://localhost:5100", json={sid: [0, 0]})
+         count = sid
+         response.set_cookie('count', count)
+    c1 = requests.get("http://localhost:5100/" + count).json()[count][0]
+    c2 = requests.get("http://localhost:5100/" + count).json()[count][1]
     c1 += 1
-    requests.put("http://localhost:5100", json={count1: c1})
+    requests.put("http://localhost:5100", json={count: [c1, c2]})
          
     return template('counter.tpl', counter1=c1, counter2=c2)
 
@@ -64,10 +59,11 @@ def increment_count2():
     #count2 = request.get_cookie('count2', default='0')
     #count2 = int(count2) + 1
     #response.set_cookie('count2', str(count2))
-    count2 = request.get_cookie('count2')
-    c2 = requests.get("http://localhost:5100/" + count2).json()[count2]
+    count = request.get_cookie('count')
+    c1 = requests.get("http://localhost:5100/" + count).json()[count][0]
+    c2 = requests.get("http://localhost:5100/" + count).json()[count][1]
     c2 += 1
-    requests.put("http://localhost:5100", json={count2: c2})
+    requests.put("http://localhost:5100", json={count: [c1, c2]})
 
     return redirect('/')
 
@@ -79,12 +75,9 @@ def reset_counts():
 
     #return redirect('/')
     
-    response.delete_cookie('count1')
-    response.delete_cookie('count2')
-    delete1 = request.get_cookie('count1')
-    delete2 = request.get_cookie('count2')
-    requests.delete("http://localhost:5100/" + delete1)
-    requests.delete("http://localhost:5100/" + delete2)
+    response.delete_cookie('count')
+    delete = request.get_cookie('count')
+    requests.delete("http://localhost:5100/" + delete)
 
     #global sid1
     #global sid2
